@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <AssemblyName>ThaiSplitLib.Standard</AssemblyName>
+    <PackageId>ThaiSplitLib.Standard</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>wk</Authors>
+    <Title>ThaiSplitLib</Title>
+    <Description>Thai word segmentation</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="dictionary.txt" />
+  </ItemGroup>
+</Project>

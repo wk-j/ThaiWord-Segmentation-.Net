@@ -2,6 +2,12 @@
 
 Dictionary text segmentation
 
+## Installing
+
+```bash
+dotnet add package ThaiSplitLib.Standard
+```
+
 ## Usage
 
 ```csharp
