@@ -1,5 +1,3 @@
-
-
 # Created by https://www.gitignore.io/api/visualstudio
 
 ### VisualStudio ###
@@ -37,3 +35,6 @@ bld/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
+
+.DS_Store
+*.swp
