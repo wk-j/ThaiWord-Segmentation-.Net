@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using THSplit;
 using Xunit;
 
-namespace UnitTestProject {
-    public class Tests {
+namespace ThaiSplitLib.Tests {
 
+    public class Tests {
         [Fact]
         public void TestCtor() {
             Spliter spliter = new Spliter();
