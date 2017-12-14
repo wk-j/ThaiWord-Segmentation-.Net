@@ -4,32 +4,26 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace THSplit
-{
-    public class Spliter
-    {
+namespace THSplit {
+    public class Spliter {
         private string[] allWord;
-        private Dictionary<char,List<string>> _dictionary ;
+        private Dictionary<char, List<string>> dictionary = new Dictionary<char, List<string>>();
 
         /// <summary>
         /// Assign Dictionary
         /// </summary>
         /// <param name="dict">string[]</param>
-        public Spliter()
-        {
-            _dictionary = new Dictionary<char, List<string>>();
-            var _assembly = Assembly.GetExecutingAssembly();
-            var _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream("ThaiSplitLib.dictionary.txt"));
-            string text = _textStreamReader.ReadToEnd();
+        public Spliter() {
+            var assembly = Assembly.GetExecutingAssembly();
+            var textStreamReader = new StreamReader(assembly.GetManifestResourceStream("ThaiSplitLib.dictionary.txt"));
+            string text = textStreamReader.ReadToEnd();
             allWord = text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
-            foreach (var word in allWord)
-            {
-                if (!_dictionary.ContainsKey(word[0]))
-                {
-                    _dictionary.Add(word[0], new List<string>());
+            foreach (var word in allWord) {
+                if (!dictionary.ContainsKey(word[0])) {
+                    dictionary.Add(word[0], new List<string>());
                     //Console.WriteLine("added "+ word[0]);
                 }
-                _dictionary[word[0]].Add(word);
+                dictionary[word[0]].Add(word);
             }
         }
 
@@ -38,22 +32,17 @@ namespace THSplit
         /// Assign Dictionary
         /// </summary>
         /// <param name="dict">string[]</param>
-        public Spliter(string[] words)
-        {
-            _dictionary = new Dictionary<char, List<string>>();
+        public Spliter(string[] words) {
             allWord = words;
-            foreach (var word in allWord)
-            {
-                if (!_dictionary.ContainsKey(word[0]))
-                {
-                    _dictionary.Add(word[0],new List<string>());
+            foreach (var word in allWord) {
+                if (!dictionary.ContainsKey(word[0])) {
+                    dictionary.Add(word[0], new List<string>());
                 }
-                _dictionary[word[0]].Add(word);
+                dictionary[word[0]].Add(word);
             }
         }
 
-        public byte[] StringToAscii(string text)
-        {
+        public byte[] StringToAscii(string text) {
             string value = text;
 
             // Convert the string into a byte[].
@@ -61,37 +50,26 @@ namespace THSplit
             return asciiBytes;
         }
 
-        public string[] GetDictionary()
-        {
-            return allWord;
-        }
+        public string[] GetDictionary() => allWord;
 
-        public List<string> SegmentByDictionary(string input)
-        {
+        public List<string> SegmentByDictionary(string input) {
             // check space
             // eng type
             string[] inputSplitSpace = input.Split(' ');
             List<string> outputList = new List<string>();
-            foreach (string item in inputSplitSpace)
-            {
+            foreach (string item in inputSplitSpace) {
                 // initial
                 char[] inputChar = item.ToCharArray();
                 string tmpString = "";
-                for (int i = 0; i < inputChar.Length; i++)
-                {
+                for (int i = 0; i < inputChar.Length; i++) {
                     // eng langauge type
-                    if (IsEngCharacter(inputChar[i]))
-                    {
+                    if (IsEngCharacter(inputChar[i])) {
                         tmpString += inputChar[i].ToString();
-                        for (int j = i + 1; j < inputChar.Length; j++)
-                        {
-                            if (IsEngCharacter(inputChar[j]))
-                            {
+                        for (int j = i + 1; j < inputChar.Length; j++) {
+                            if (IsEngCharacter(inputChar[j])) {
                                 tmpString += inputChar[j];
                                 i = j;
-                            }
-                            else
-                            {
+                            } else {
                                 break;
                             }
                         }
@@ -99,58 +77,41 @@ namespace THSplit
                         tmpString = "";
                     }
                     // thai langauge type
-                    else if (IsVowelNeedConsonant(inputChar[i]))
-                    {
+                    else if (IsVowelNeedConsonant(inputChar[i])) {
                         tmpString += inputChar[i].ToString();
-                        for (int j = i + 1; j < inputChar.Length; j++)
-                        {
-                            if (IsVowelNeedConsonant(inputChar[j]))
-                            {
+                        for (int j = i + 1; j < inputChar.Length; j++) {
+                            if (IsVowelNeedConsonant(inputChar[j])) {
                                 tmpString += inputChar[j];
                                 i = j;
-                            }
-                            else
-                            {
+                            } else {
                                 break;
                             }
 
                         }
                         outputList.Add(tmpString);
                         tmpString = "";
-                    }
-                    else if (IsToken(inputChar[i]))
-                    {
+                    } else if (IsToken(inputChar[i])) {
                         tmpString += inputChar[i].ToString();
-                        for (int j = i + 1; j < inputChar.Length; j++)
-                        {
-                            if (IsToken(inputChar[j]))
-                            {
+                        for (int j = i + 1; j < inputChar.Length; j++) {
+                            if (IsToken(inputChar[j])) {
                                 tmpString += inputChar[j];
                                 i = j;
-                            }
-                            else
-                            {
+                            } else {
                                 break;
                             }
 
                         }
                         outputList.Add(tmpString);
                         tmpString = "";
-                    }
-                    else if (IsConsonant(inputChar[i]) || isVowel(inputChar[i]))
-                    {
+                    } else if (IsConsonant(inputChar[i]) || isVowel(inputChar[i])) {
                         tmpString += inputChar[i].ToString();
                         string moretmp = tmpString;
                         bool isFound = false;
-                        for (int j = i + 1; j < inputChar.Length; j++)
-                        {
+                        for (int j = i + 1; j < inputChar.Length; j++) {
                             moretmp += inputChar[j].ToString();
-                            if (_dictionary.ContainsKey(moretmp[0]))
-                            {
-                                foreach (var word in _dictionary[moretmp[0]])
-                                {
-                                    if (word == moretmp)
-                                    {
+                            if (dictionary.ContainsKey(moretmp[0])) {
+                                foreach (var word in dictionary[moretmp[0]]) {
+                                    if (word == moretmp) {
                                         tmpString = moretmp;
                                         i = j;
                                         isFound = true;
@@ -168,14 +129,11 @@ namespace THSplit
                             //}
 
                         }
-                        if (isFound)
-                        {
+                        if (isFound) {
                             outputList.Add(tmpString);
                         }
                         tmpString = "";
-                    }
-                    else
-                    {
+                    } else {
                         outputList.Add(inputChar[i].ToString());
                     }
                 }
@@ -184,24 +142,13 @@ namespace THSplit
             return outputList;
         }
 
-        public bool IsConsonant(char charNumber)
-        {
-            if (charNumber >= 3585 && 3630 >= charNumber)
-            {
-                return true;
-            }
-            return false;
-        }
-        public bool isVowel(char charNumber)
-        {
-            if (charNumber >= 3632 && 3653 >= charNumber)
-            {
-                return true;
-            }
-            return false;
-        }
-        public bool IsVowelNeedConsonant(char charNumber)
-        {
+        public bool IsConsonant(char charNumber) => (charNumber >= 3585 && 3630 >= charNumber);
+
+        public bool isVowel(char charNumber) => (charNumber >= 3632 && 3653 >= charNumber);
+
+        public bool IsToken(char charNumber) => (charNumber >= 3656 && 3659 >= charNumber);
+
+        public bool IsVowelNeedConsonant(char charNumber) {
             if (charNumber >= 3632 && 3641 >= charNumber)
                 return true;
 
@@ -210,25 +157,15 @@ namespace THSplit
 
             return false;
         }
-        public bool IsToken(char charNumber)
-        {
-            if (charNumber >= 3656 && 3659 >= charNumber)
-            {
-                return true;
-            }
-            return false;
-        }
 
-        public bool IsEngCharacter(char charNumber)
-        {
+
+        public bool IsEngCharacter(char charNumber) {
             // large letter
-            if (charNumber >= 41 && 90 >= charNumber)
-            {
+            if (charNumber >= 41 && 90 >= charNumber) {
                 return true;
             }
             // small letter
-            else if (charNumber >= 61 && 122 >= charNumber)
-            {
+            else if (charNumber >= 61 && 122 >= charNumber) {
                 return true;
             }
             return false;
