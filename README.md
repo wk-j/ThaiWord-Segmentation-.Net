@@ -1,15 +1,14 @@
-# ThaiWord-Segmentation-.Net
-Dictionary Text segmentation
-## How to use
-```
+## Thai Word Segmentation port to .NET Standard 2.0 
+
+Dictionary text segmentation
+
+## Usage
+
+```csharp
 using THSplit;
- public void TestSplit1()
-        {
-            Spliter spliter = new Spliter();
-            string test = "นายจะไปไหนหรอ";
-            var output = spliter.SegmentByDictionary(test);
-            //output is List<string>
-        }
+public void TestSplit1() {
+    Spliter spliter = new Spliter();
+    string test = "นายจะไปไหนหรอ";
+    var output = spliter.SegmentByDictionary(test);
+}
 ```
-## Base on PHP THSplitlib
-https://github.com/moohooooo/thsplitlib
